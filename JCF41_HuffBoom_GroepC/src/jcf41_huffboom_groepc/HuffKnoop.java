@@ -20,6 +20,14 @@ public class HuffKnoop implements Comparable<HuffKnoop> {
         this.freq = freq;
     }
     
+    public HuffKnoop(HuffKnoop left, HuffKnoop right)
+    {
+        character = '*';
+        freq = left.freq + right.freq;
+        leftChild = left;
+        rightChild = right;
+    }
+    
     @Override
     public int compareTo(HuffKnoop other) {
         return Integer.compare(this.freq, other.freq);
