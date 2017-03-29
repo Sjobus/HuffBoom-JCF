@@ -26,7 +26,8 @@ public class JCF41_HuffBoom_GroepC {
         knoopList = MaakKnoop(freq);
         HuffKnoop rootKnoop = BouwBoom(knoopList);
         getCharacterCode(rootKnoop,"", characterCodeMap);
-        System.out.println(freq);
+        Compress(zin, characterCodeMap);
+        //System.out.println(freq);
         /*while(!knoopList.isEmpty())
         {
             System.out.println(knoopList.poll());
@@ -122,4 +123,17 @@ public class JCF41_HuffBoom_GroepC {
         }
         return characterCode;
     }
+    
+    public static String Compress(String text, HashMap<Character, String> codeMap)
+    {
+        StringBuilder sb = new StringBuilder();
+        
+        
+        for(char c : text.toCharArray())
+        {
+            sb.append(codeMap.get(c));
+        }
+        System.out.println(sb.toString());
+        return sb.toString();
+    } 
 }
