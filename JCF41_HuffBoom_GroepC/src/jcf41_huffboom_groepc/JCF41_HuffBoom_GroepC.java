@@ -21,8 +21,9 @@ public class JCF41_HuffBoom_GroepC {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //String zin = "Hello world";
-        char[] chars = zin.toCharArray();
+        
+        ArrayList<String> zinnen = Lees();
+        char[] chars = zinnen.toString().toCharArray();
         HashMap<Character, Integer> freq = new HashMap<>();
         PriorityQueue<HuffKnoop> knoopList = new PriorityQueue<>();
         HashMap<Character, String> characterCodeMap = new HashMap<>();
@@ -30,7 +31,7 @@ public class JCF41_HuffBoom_GroepC {
         knoopList = MaakKnoop(freq);
         HuffKnoop rootKnoop = BouwBoom(knoopList);
         getCharacterCode(rootKnoop,"", characterCodeMap);
-        Compress(zin, characterCodeMap);
+        Compress(zinnen, characterCodeMap);
         //System.out.println(freq);
         /*while(!knoopList.isEmpty())
         {
@@ -128,12 +129,12 @@ public class JCF41_HuffBoom_GroepC {
         return characterCode;
     }
     
-    public static String Compress(String text, HashMap<Character, String> codeMap)
+    public static String Compress(ArrayList<String> text, HashMap<Character, String> codeMap)
     {
         StringBuilder sb = new StringBuilder();
         
         
-        for(char c : text.toCharArray())
+        for(char c : text.toString().toCharArray())
         {
             sb.append(codeMap.get(c));
         }
@@ -141,9 +142,9 @@ public class JCF41_HuffBoom_GroepC {
         return sb.toString();
     } 
     
-    public static char[] Lees()
+    public static ArrayList<String> Lees()
     {
-        
+        ArrayList<String> zinnen = new ArrayList<>();
         BufferedReader reader = null;
         try
         {
@@ -153,7 +154,7 @@ public class JCF41_HuffBoom_GroepC {
            String line;
            while((line = reader.readLine()) != null)
            {
-               //shit
+               zinnen.add(line);
            }
         }
         catch(IOException e)
@@ -171,6 +172,7 @@ public class JCF41_HuffBoom_GroepC {
                 System.out.println("Error bij het sluiten van reader: " + e.getMessage());
             }
         }
+        return zinnen;
     }
     
           
