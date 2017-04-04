@@ -7,10 +7,12 @@ package jcf41_huffboom_groepc;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -40,9 +42,9 @@ public class JCF41_HuffBoom_GroepC {
         HuffKnoop rootKnoop = BouwBoom(knoopList);
         SchrijfBoomObject(rootKnoop);
         getCharacterCode(rootKnoop,"", characterCodeMap);
-        Compress(zinnen, characterCodeMap);
         
         rootKnoop = LezenBoomObject();
+        SchrijfBinairyFile(Compress(zinnen, characterCodeMap));
         //System.out.println(freq);
         /*while(!knoopList.isEmpty())
         {
@@ -281,6 +283,44 @@ public class JCF41_HuffBoom_GroepC {
             catch (IOException e)
             {
                 e.printStackTrace();
+            }
+        }
+    }
+    
+    private static void SchrijfBinairyFile(String binary)
+    {
+        BufferedWriter bufferedWriter = null;
+        FileWriter fileWriter = null;
+        try
+        {
+            fileWriter = new FileWriter("..\\BinaryFile.txt");
+            bufferedWriter = new BufferedWriter(fileWriter);
+
+            bufferedWriter.write(binary);
+
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error Binaryfilewriter : " + e.getMessage());
+        }
+        finally
+        {
+            // waarom schrijft ie niet als je hem niet .closed()?
+            try
+            {
+                if (bufferedWriter != null)
+                {
+                    bufferedWriter.close();
+                }
+                if (fileWriter != null)
+                {
+                    fileWriter.close();
+                }
+
+            }
+            catch (IOException e)
+            {
+                System.out.println("Error Binaryfilewriter closer : " + e.getMessage());
             }
         }
     }
