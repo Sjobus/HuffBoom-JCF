@@ -8,6 +8,7 @@ package jcf41_huffboom_groepc;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,7 +27,8 @@ import java.util.*;
 public class JCF41_HuffBoom_GroepC {
 
     private final static String alice = "..\\AliceInWonderLand.txt";
-    private final static String binaryCode ="..\\BinaryFile.txt";
+    private final static String binaryCode ="..\\BinaryFile.dat";
+    private final static String boomCode ="..\\Huffboom.txt";
     /**
      * @param args the command line arguments
      */
@@ -206,7 +208,7 @@ public class JCF41_HuffBoom_GroepC {
         try
         {
 
-            fis = new FileInputStream("..\\Huffboom.txt");
+            fis = new FileInputStream(boomCode);
             in = new ObjectInputStream(fis);
             boom = (HuffKnoop)in.readObject();
         }
@@ -252,7 +254,7 @@ public class JCF41_HuffBoom_GroepC {
         OutputStream fileStream = null;
         try
         {
-            fileStream = new FileOutputStream("..\\Huffboom.txt");
+            fileStream = new FileOutputStream(boomCode);
             buffer = new BufferedOutputStream(fileStream);
             binWriter = new ObjectOutputStream(buffer);
             binWriter.writeObject(knoop);
@@ -291,14 +293,14 @@ public class JCF41_HuffBoom_GroepC {
      */
     private static void SchrijfBinairyFile(String binary)
     {
-        BufferedWriter bufferedWriter = null;
-        FileWriter fileWriter = null;
+        DataOutputStream dos = null;
+        FileOutputStream fos = null;
         try
         {
-            fileWriter = new FileWriter("..\\BinaryFile.txt");
-            bufferedWriter = new BufferedWriter(fileWriter);
+            fos = new FileOutputStream(binaryCode);
+            dos = new DataOutputStream(fos);
 
-            bufferedWriter.write(binary);
+            dos.writeBytes(binary);
 
         }
         catch (IOException e)
@@ -310,13 +312,13 @@ public class JCF41_HuffBoom_GroepC {
             // waarom schrijft ie niet als je hem niet .closed()?
             try
             {
-                if (bufferedWriter != null)
+                if (dos != null)
                 {
-                    bufferedWriter.close();
+                    dos.close();
                 }
-                if (fileWriter != null)
+                if (fos != null)
                 {
-                    fileWriter.close();
+                    fos.close();
                 }
 
             }
