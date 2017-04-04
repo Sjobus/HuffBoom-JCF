@@ -26,13 +26,13 @@ import java.util.*;
 public class JCF41_HuffBoom_GroepC {
 
     private final static String alice = "..\\AliceInWonderLand.txt";
-    private final static String binaryCode ="..\\BinaryCode";
+    private final static String binaryCode ="..\\BinaryFile.txt";
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         
-        ArrayList<String> zinnen = LezenBoek(alice);
+        ArrayList<String> zinnen = LezenBestand(alice);
         char[] chars = zinnen.toString().toCharArray();
         HashMap<Character, Integer> freq = new HashMap<>();
         PriorityQueue<HuffKnoop> knoopList = new PriorityQueue<>();
@@ -41,16 +41,12 @@ public class JCF41_HuffBoom_GroepC {
         knoopList = MaakKnoop(freq);
         HuffKnoop rootKnoop = BouwBoom(knoopList);
         SchrijfBoomObject(rootKnoop);
-        getCharacterCode(rootKnoop,"", characterCodeMap);
-        
+        getCharacterCode(rootKnoop,"", characterCodeMap);        
         rootKnoop = LezenBoomObject();
-        SchrijfBinairyFile(Compress(zinnen, characterCodeMap));
-        //System.out.println(freq);
-        /*while(!knoopList.isEmpty())
-        {
-            System.out.println(knoopList.poll());
-        }*/
-        
+        SchrijfBinairyFile(Compress(zinnen, characterCodeMap));        
+        System.out.println(decompress(rootKnoop,LezenBestand(binaryCode).get(0)));
+       
+       
     }
     
     /**
@@ -141,6 +137,7 @@ public class JCF41_HuffBoom_GroepC {
         }
         return characterCode;
     }
+    
     /**
      * 
      * @param text
@@ -156,7 +153,7 @@ public class JCF41_HuffBoom_GroepC {
         {
             sb.append(codeMap.get(c));
         }
-        System.out.println(sb.toString());
+        //System.out.println(sb.toString());
         return sb.toString();
     } 
     
@@ -164,7 +161,7 @@ public class JCF41_HuffBoom_GroepC {
      * Leest de file van Alice in Wonderland en zet ze in een ArrayList
      * @return ArrayList<String> zinnen
      */
-    public static ArrayList<String> LezenBoek(String bestand)
+    public static ArrayList<String> LezenBestand(String bestand)
     {
         ArrayList<String> zinnen = new ArrayList<>();
         BufferedReader reader = null;
@@ -196,6 +193,7 @@ public class JCF41_HuffBoom_GroepC {
         }
         return zinnen;
     }
+    
    /**
     * Het uitlezen van het bestand waar de huffknoopboom in staat
     * @return HuffKnoop de boom
@@ -287,6 +285,10 @@ public class JCF41_HuffBoom_GroepC {
         }
     }
     
+    /**
+     * 
+     * @param binary 
+     */
     private static void SchrijfBinairyFile(String binary)
     {
         BufferedWriter bufferedWriter = null;
@@ -323,5 +325,43 @@ public class JCF41_HuffBoom_GroepC {
                 System.out.println("Error Binaryfilewriter closer : " + e.getMessage());
             }
         }
+    }
+    
+    /**
+     * 
+     * @param root
+     * @param msg
+     * @return 
+     */
+    public static String decompress(HuffKnoop root, String msg)
+    {
+        String finalMsg = "";
+        HuffKnoop realRoot = root;
+        
+        for (char charazard : msg.toCharArray())
+        {
+                if (charazard == '0')
+                {
+                    //System.out.println("ga naar links");
+                    
+                    root = root.leftChild;
+
+                }
+                else if (charazard == '1')
+                {
+                    //System.out.println("ga naar rechts");
+                    
+                    root = root.rightChild;
+                }
+            
+            if (root.leftChild == null && root.rightChild == null)
+            {
+                //System.out.println("is blaadje: " + root.karakter);
+                finalMsg += root.character;
+                root = realRoot;
+            }            
+        }
+        
+        return finalMsg;
     }
 }
