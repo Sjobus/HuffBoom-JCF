@@ -5,6 +5,10 @@
  */
 package jcf41_huffboom_groepc;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -17,7 +21,7 @@ public class JCF41_HuffBoom_GroepC {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String zin = "Hello world";
+        //String zin = "Hello world";
         char[] chars = zin.toCharArray();
         HashMap<Character, Integer> freq = new HashMap<>();
         PriorityQueue<HuffKnoop> knoopList = new PriorityQueue<>();
@@ -136,4 +140,38 @@ public class JCF41_HuffBoom_GroepC {
         System.out.println(sb.toString());
         return sb.toString();
     } 
+    
+    public static char[] Lees()
+    {
+        
+        BufferedReader reader = null;
+        try
+        {
+           File file = new File("..\\AliceInWonderLand.txt");
+           reader = new BufferedReader(new FileReader(file));
+           
+           String line;
+           while((line = reader.readLine()) != null)
+           {
+               //shit
+           }
+        }
+        catch(IOException e)
+        {
+            System.out.println("Error bij het lezen: " + e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                reader.close();
+            }
+            catch(IOException e)
+            {
+                System.out.println("Error bij het sluiten van reader: " + e.getMessage());
+            }
+        }
+    }
+    
+          
 }
