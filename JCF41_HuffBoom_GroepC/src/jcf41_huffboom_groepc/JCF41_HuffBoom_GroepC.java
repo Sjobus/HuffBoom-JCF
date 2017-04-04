@@ -23,12 +23,14 @@ import java.util.*;
  */
 public class JCF41_HuffBoom_GroepC {
 
+    private final static String alice = "..\\AliceInWonderLand.txt";
+    private final static String binaryCode ="..\\BinaryCode";
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         
-        ArrayList<String> zinnen = LezenBoek();
+        ArrayList<String> zinnen = LezenBoek(alice);
         char[] chars = zinnen.toString().toCharArray();
         HashMap<Character, Integer> freq = new HashMap<>();
         PriorityQueue<HuffKnoop> knoopList = new PriorityQueue<>();
@@ -137,7 +139,12 @@ public class JCF41_HuffBoom_GroepC {
         }
         return characterCode;
     }
-    
+    /**
+     * 
+     * @param text
+     * @param codeMap
+     * @return 
+     */
     public static String Compress(ArrayList<String> text, HashMap<Character, String> codeMap)
     {
         StringBuilder sb = new StringBuilder();
@@ -151,13 +158,17 @@ public class JCF41_HuffBoom_GroepC {
         return sb.toString();
     } 
     
-    public static ArrayList<String> LezenBoek()
+    /**
+     * Leest de file van Alice in Wonderland en zet ze in een ArrayList
+     * @return ArrayList<String> zinnen
+     */
+    public static ArrayList<String> LezenBoek(String bestand)
     {
         ArrayList<String> zinnen = new ArrayList<>();
         BufferedReader reader = null;
         try
         {
-           File file = new File("..\\AliceInWonderLand.txt");
+           File file = new File(bestand);
            reader = new BufferedReader(new FileReader(file));
            
            String line;
