@@ -5,11 +5,13 @@
  */
 package jcf41_huffboom_groepc;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Sibe
  */
-public class HuffKnoop implements Comparable<HuffKnoop> {
+public class HuffKnoop implements Comparable<HuffKnoop>, Serializable{
     public char character;
     public Integer freq;
     public HuffKnoop leftChild, rightChild;

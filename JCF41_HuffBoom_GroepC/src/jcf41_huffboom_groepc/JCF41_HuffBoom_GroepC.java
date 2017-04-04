@@ -5,10 +5,16 @@
  */
 package jcf41_huffboom_groepc;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -22,7 +28,7 @@ public class JCF41_HuffBoom_GroepC {
      */
     public static void main(String[] args) {
         
-        ArrayList<String> zinnen = Lees();
+        ArrayList<String> zinnen = LezenBoek();
         char[] chars = zinnen.toString().toCharArray();
         HashMap<Character, Integer> freq = new HashMap<>();
         PriorityQueue<HuffKnoop> knoopList = new PriorityQueue<>();
@@ -30,8 +36,11 @@ public class JCF41_HuffBoom_GroepC {
         freq = Frequentie(chars);
         knoopList = MaakKnoop(freq);
         HuffKnoop rootKnoop = BouwBoom(knoopList);
+        SchrijfBoomObject(rootKnoop);
         getCharacterCode(rootKnoop,"", characterCodeMap);
         Compress(zinnen, characterCodeMap);
+        
+        rootKnoop = LezenBoomObject();
         //System.out.println(freq);
         /*while(!knoopList.isEmpty())
         {
@@ -142,7 +151,7 @@ public class JCF41_HuffBoom_GroepC {
         return sb.toString();
     } 
     
-    public static ArrayList<String> Lees()
+    public static ArrayList<String> LezenBoek()
     {
         ArrayList<String> zinnen = new ArrayList<>();
         BufferedReader reader = null;
@@ -174,6 +183,94 @@ public class JCF41_HuffBoom_GroepC {
         }
         return zinnen;
     }
-    
-          
+   /**
+    * Het uitlezen van het bestand waar de huffknoopboom in staat
+    * @return HuffKnoop de boom
+    */
+   public static HuffKnoop LezenBoomObject()
+   {
+        FileInputStream fis = null;
+        ObjectInputStream in = null;
+        HuffKnoop boom = null;
+        try
+        {
+
+            fis = new FileInputStream("..\\Huffboom.txt");
+            in = new ObjectInputStream(fis);
+            boom = (HuffKnoop)in.readObject();
+        }
+        catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e)
+        {
+            System.out.println("Error bij lezen Binary file");
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (in != null)
+                {
+                    in.close();
+                }
+                if (fis != null)
+                {
+                    fis.close();
+                }
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return boom;
+    }
+    /**
+     * Het wegschrijven van de huffboom in een bestand als object
+     * @param HuffKnoop de boom
+     */
+    private static void SchrijfBoomObject(HuffKnoop knoop) 
+    {
+        ObjectOutputStream binWriter = null;
+        OutputStream buffer = null;
+        OutputStream fileStream = null;
+        try
+        {
+            fileStream = new FileOutputStream("..\\Huffboom.txt");
+            buffer = new BufferedOutputStream(fileStream);
+            binWriter = new ObjectOutputStream(buffer);
+            binWriter.writeObject(knoop);
+            System.out.println("Klaar met schrijven van boomobject in file.");
+
+        }
+        catch (IOException e)
+        {
+            System.out.println("error Binbuf : " + e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (binWriter != null)
+                {
+                    binWriter.close();
+                }
+                if (binWriter != null)
+                {
+                    binWriter.close();
+                }
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 }
