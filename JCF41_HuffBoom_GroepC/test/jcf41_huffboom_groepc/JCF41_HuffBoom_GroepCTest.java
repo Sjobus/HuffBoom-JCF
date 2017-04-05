@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import static jcf41_huffboom_groepc.JCF41_HuffBoom_GroepC.getCharacterCode;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -190,18 +191,19 @@ public class JCF41_HuffBoom_GroepCTest {
 
     /**
      * Test of Compress method, of class JCF41_HuffBoom_GroepC.
-     
+     */
     @Test
     public void testCompress() {
         System.out.println("Compress");
-        ArrayList<String> text = null;
-        HashMap<Character, String> codeMap = null;
-        String expResult = "";
+        ArrayList<String> text = new ArrayList<>();
+        text.add("test1");
+
+        HashMap<Character, String> codeMap = new HashMap<>();
+        codeMap = getCharacterCode(deRootKnoop,"", codeMap); 
+        String expResult = "010000010110";
         String result = JCF41_HuffBoom_GroepC.Compress(text, codeMap);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+    }
 
     /**
      * Test of LezenBestand method, of class JCF41_HuffBoom_GroepC.

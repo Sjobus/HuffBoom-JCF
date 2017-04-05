@@ -306,9 +306,15 @@ public class JCF41_HuffBoom_GroepC {
         {
             fos = new FileOutputStream(binaryCode);
             dos = new DataOutputStream(fos);
-
-            dos.writeBytes(binary);
-
+            BitSet bitSet = new BitSet(binary.length());
+            int bitcounter = 0;
+            for(Character c : binary.toCharArray()) {
+                if(c.equals('1')) {
+                    bitSet.set(bitcounter);
+                }
+                bitcounter++;
+            }
+            dos.write(bitSet.toByteArray());
         }
         catch (IOException e)
         {
