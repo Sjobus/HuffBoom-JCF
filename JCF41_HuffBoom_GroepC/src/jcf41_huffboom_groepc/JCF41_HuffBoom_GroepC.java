@@ -8,6 +8,7 @@ package jcf41_huffboom_groepc;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,7 +47,7 @@ public class JCF41_HuffBoom_GroepC {
         getCharacterCode(rootKnoop,"", characterCodeMap);        
         rootKnoop = LezenBoomObject();
         SchrijfBinairyFile(Compress(zinnen, characterCodeMap));        
-        System.out.println(decompress(rootKnoop,LezenBestand(binaryCode).get(0)));
+        System.out.println(decompress(rootKnoop,LezenBinair(binaryCode)));
        
        
     }
@@ -203,6 +204,46 @@ public class JCF41_HuffBoom_GroepC {
         return zinnen;
     }
     
+    /**
+     * Leest een binair bestand.
+     * @return ArrayList<String> binaire code
+     */
+    public static String LezenBinair(String bestand)
+    {
+        File file = new File(bestand);
+        byte[] filedata = new byte[(int)file.length()];
+        DataInputStream dis = null;
+        FileInputStream fis = null;
+        try
+        {
+            fis = new FileInputStream(file);
+            dis = new DataInputStream(fis);
+            dis.readFully(filedata);
+        }
+        catch(IOException e)
+        {
+            System.out.println("Error bij het lezen: " + e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                dis.close();
+            }
+            catch(IOException e)
+            {
+                System.out.println("Error bij het sluiten van reader: " + e.getMessage());
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for(byte b : filedata)
+        {
+            String binair = String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
+            sb.append(binair);
+        }
+        return sb.toString();
+    }
+    
    /**
     * Het uitlezen van het bestand waar de huffknoopboom in staat
     * @return HuffKnoop de boom
@@ -304,15 +345,30 @@ public class JCF41_HuffBoom_GroepC {
         FileOutputStream fos = null;
         try
         {
+            int extraZeroCount = 0;
             fos = new FileOutputStream(binaryCode);
             dos = new DataOutputStream(fos);
             BitSet bitSet = new BitSet(binary.length());
-            int bitcounter = 0;
-            for(Character c : binary.toCharArray()) {
-                if(c.equals('1')) {
-                    bitSet.set(bitcounter);
+            for(int i = 0; i < binary.length(); i += 8)
+            {
+                if((i+8) < binary.length())
+                {
+                    int value = Integer.parseInt(binary.substring(i, i+8), 2);
+                    byte b = (byte)value;
+                    dos.write(b);
                 }
-                bitcounter++;
+                else
+                {
+                    int extraZeros = i + 8 - binary.length();
+                    for (int j = 0; j < extraZeros; j++)
+                    {
+                        binary += "0";
+                        extraZeroCount++;
+                    }
+                    int value = Integer.parseInt(binary.substring(i, i+8), 2);
+                    byte b = (byte)value;
+                    dos.write(b);
+                }
             }
             dos.write(bitSet.toByteArray());
         }
