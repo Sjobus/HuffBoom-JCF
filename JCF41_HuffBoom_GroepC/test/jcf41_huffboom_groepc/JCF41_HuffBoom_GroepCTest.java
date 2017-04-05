@@ -87,19 +87,20 @@ public class JCF41_HuffBoom_GroepCTest {
         freq.put('e',1);
         freq.put('s',1);
         freq.put('1',1);
-        PriorityQueue<HuffKnoop> expResult = new PriorityQueue<HuffKnoop>();
+        PriorityQueue<HuffKnoop> expResult = new PriorityQueue<>();
         for(char c : freq.keySet())
         {
             HuffKnoop knoop = new HuffKnoop(c,freq.get(c));
-            
+            System.out.println("entry: " + knoop.character + " freq: " + knoop.freq );
             expResult.add(knoop);
         }
         PriorityQueue<HuffKnoop> result = JCF41_HuffBoom_GroepC.MaakKnoop(freq);
-        for(HuffKnoop entry : result)
-        {
-            //System.out.println("entry: " + entry.getKey() + " value: " + entry.getValue());
-            assertEquals(entry,expResult.element());           
-         
+        while(result.size() > 1)
+        {  
+            HuffKnoop knoopResult = result.poll();
+            HuffKnoop expKnoop = expResult.poll();
+            assertEquals(knoopResult.character,expKnoop.character); 
+            assertEquals(knoopResult.freq,expKnoop.freq);
         }
         
         
@@ -120,19 +121,18 @@ public class JCF41_HuffBoom_GroepCTest {
         PriorityQueue<HuffKnoop> pq = new PriorityQueue<HuffKnoop>();
         for(char c : freq.keySet())
         {
-            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));
-            System.out.println("Knoop :" + knoop.character + " waarde: " + knoop.freq);
+            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));            
             pq.add(knoop);
         }
         HuffKnoop expResult = bouwboom(pq);
         for(char c : freq.keySet())
         {
-            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));
-            System.out.println("Knoop :" + knoop.character + " waarde: " + knoop.freq);
+            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));            
             pq.add(knoop);
         }
         HuffKnoop result = JCF41_HuffBoom_GroepC.BouwBoom(pq);
-        assertEquals(expResult, result);
+        assertEquals(expResult.character, result.character);
+        assertEquals(expResult.freq,result.freq);
         
     }
 
