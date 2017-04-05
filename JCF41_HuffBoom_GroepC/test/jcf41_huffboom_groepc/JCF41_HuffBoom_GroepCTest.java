@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
  */
 public class JCF41_HuffBoom_GroepCTest {
     
+    public static HuffKnoop deRootKnoop;
     public JCF41_HuffBoom_GroepCTest() {
     }
     
@@ -92,8 +93,7 @@ public class JCF41_HuffBoom_GroepCTest {
         PriorityQueue<HuffKnoop> expResult = new PriorityQueue<>();
         for(char c : freq.keySet())
         {
-            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));
-            System.out.println("entry: " + knoop.character + " freq: " + knoop.freq );
+            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));            
             expResult.add(knoop);
         }
         //Voer methode uit om resultaat te krijgen
@@ -105,7 +105,6 @@ public class JCF41_HuffBoom_GroepCTest {
             HuffKnoop expKnoop = expResult.poll();
             assertEquals(knoopResult.character,expKnoop.character); 
             assertEquals(knoopResult.freq,expKnoop.freq);
-
         }
         
         
@@ -135,9 +134,10 @@ public class JCF41_HuffBoom_GroepCTest {
             HuffKnoop knoop = new HuffKnoop(c,freq.get(c));            
             pq.add(knoop);
         }
-        HuffKnoop result = JCF41_HuffBoom_GroepC.BouwBoom(pq);
-        assertEquals(expResult.character, result.character);
-        assertEquals(expResult.freq,result.freq);
+        deRootKnoop = JCF41_HuffBoom_GroepC.BouwBoom(pq);
+       
+        assertEquals(expResult.character, deRootKnoop.character);
+        assertEquals(expResult.freq,deRootKnoop.freq);
         
     }
 
@@ -155,19 +155,38 @@ public class JCF41_HuffBoom_GroepCTest {
     }
     /**
      * Test of getCharacterCode method, of class JCF41_HuffBoom_GroepC.
-     
+     */
     @Test
     public void testGetCharacterCode() {
         System.out.println("getCharacterCode");
-        HuffKnoop root = null;
+        HuffKnoop root = deRootKnoop;        
         String path = "";
-        HashMap<Character, String> characterCode = null;
-        HashMap expResult = null;
-        HashMap result = JCF41_HuffBoom_GroepC.getCharacterCode(root, path, characterCode);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+        HashMap<Character, String> characterCodeExp = new HashMap<>();
+        HashMap<Character, String> characterCodeResult = new HashMap<>();
+        HashMap<Character, String> expResult = getCharacterCode(root, path, characterCodeExp);
+        HashMap<Character, String> result = JCF41_HuffBoom_GroepC.getCharacterCode(root, path, characterCodeResult);
+        for(Map.Entry<Character,String> entry : result.entrySet())
+        {
+            assertEquals(entry.getValue(),expResult.get(entry.getKey()));
+        }
+        
+    }
+    
+    public static HashMap getCharacterCode(HuffKnoop root, String path, HashMap<Character, String> characterCode)
+    {
+        if (root.leftChild != null && root.rightChild != null)
+        {
+           characterCode.putAll(getCharacterCode(root.leftChild, path + "0",characterCode));
+           
+           characterCode.putAll(getCharacterCode(root.rightChild, path + "1",characterCode));
+        }
+        else 
+        {
+            //System.out.println(root.character + " : " + path);
+            characterCode.put(root.character, path);
+        }
+        return characterCode;
+    }
 
     /**
      * Test of Compress method, of class JCF41_HuffBoom_GroepC.
