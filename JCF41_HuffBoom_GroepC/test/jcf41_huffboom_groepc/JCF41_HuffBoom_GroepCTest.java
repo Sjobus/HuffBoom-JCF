@@ -62,36 +62,53 @@ public class JCF41_HuffBoom_GroepCTest {
         String s = "test1";
         System.out.println("Frequentie");
         char[] karacters = s.toCharArray();
-        HashMap<String, Integer> expResult = new HashMap<>();
-        expResult.put("t",2);
-        expResult.put("e",1);
-        expResult.put("s",1);
-        expResult.put("1",1);
-        HashMap<String, Integer> result = JCF41_HuffBoom_GroepC.Frequentie(karacters);        
+        HashMap<Character, Integer> expResult = new HashMap<>();
+        expResult.put('t',2);
+        expResult.put('e',1);
+        expResult.put('s',1);
+        expResult.put('1',1);
+        HashMap<Character, Integer> result = JCF41_HuffBoom_GroepC.Frequentie(karacters);        
         assertEquals(expResult.size(),result.size());
-        /*for(Map.Entry<String,Integer> entry : expResult.entrySet())
+        for(Map.Entry<Character,Integer> entry : expResult.entrySet())
         {
+            //System.out.println("entry: " + entry.getKey() + " value: " + entry.getValue());
             assertEquals(entry.getValue(),result.get(entry.getKey()));
-        }*/
+        }
     }
 
     /**
      * Test of MaakKnoop method, of class JCF41_HuffBoom_GroepC.
-     
+     */
     @Test
     public void testMaakKnoop() {
         System.out.println("MaakKnoop");
-        HashMap<Character, Integer> freq = null;
-        PriorityQueue<HuffKnoop> expResult = null;
+        HashMap<Character, Integer> freq = new HashMap<>();
+        freq.put('t',2);
+        freq.put('e',1);
+        freq.put('s',1);
+        freq.put('1',1);
+        PriorityQueue<HuffKnoop> expResult = new PriorityQueue<HuffKnoop>();
+        for(char c : freq.keySet())
+        {
+            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));
+            System.out.println("Knoop :" + knoop.character + " waarde: " + knoop.freq);
+            expResult.add(knoop);
+        }
         PriorityQueue<HuffKnoop> result = JCF41_HuffBoom_GroepC.MaakKnoop(freq);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+        for(HuffKnoop entry : result)
+        {
+            //System.out.println("entry: " + entry.getKey() + " value: " + entry.getValue());
+            assertEquals(entry,expResult.element());           
+         
+        }
+        
+        
+        
+    }
 
     /**
      * Test of BouwBoom method, of class JCF41_HuffBoom_GroepC.
-     
+     */
     @Test
     public void testBouwBoom() {
         System.out.println("BouwBoom");
@@ -101,7 +118,7 @@ public class JCF41_HuffBoom_GroepCTest {
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
-    }*/
+    }
 
     /**
      * Test of getCharacterCode method, of class JCF41_HuffBoom_GroepC.

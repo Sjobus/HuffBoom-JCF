@@ -56,7 +56,7 @@ public class JCF41_HuffBoom_GroepC {
      * @param karacters
      * @return HashMap<Character,Integer>
      */
-    public static HashMap Frequentie(char[] karacters)
+    public static HashMap<Character, Integer> Frequentie(char[] karacters)
     {
         HashMap<Character, Integer> frequentie = new HashMap<>();
         for(char c : karacters)
