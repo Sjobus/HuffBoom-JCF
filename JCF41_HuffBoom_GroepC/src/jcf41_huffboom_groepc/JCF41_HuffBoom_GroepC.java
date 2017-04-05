@@ -148,6 +148,10 @@ public class JCF41_HuffBoom_GroepC {
      */
     public static String Compress(ArrayList<String> text, HashMap<Character, String> codeMap)
     {
+        Long starttime;
+        Long endtime;
+        Long duration;
+        starttime = System.nanoTime();
         StringBuilder sb = new StringBuilder();
         
         
@@ -155,7 +159,10 @@ public class JCF41_HuffBoom_GroepC {
         {
             sb.append(codeMap.get(c));
         }
-        //System.out.println(sb.toString());
+        
+        endtime = System.nanoTime();
+        duration = (endtime - starttime) / 1000000;
+        System.out.println("Compress code duurt: " + duration);
         return sb.toString();
     } 
     
@@ -337,9 +344,12 @@ public class JCF41_HuffBoom_GroepC {
      */
     public static String decompress(HuffKnoop root, String msg)
     {
-        String finalMsg = "";
+        StringBuilder sb = new StringBuilder();
         HuffKnoop realRoot = root;
-        
+        Long starttime;
+        Long endtime;
+        Long duration;
+        starttime = System.nanoTime();
         for (char charazard : msg.toCharArray())
         {
                 if (charazard == '0')
@@ -359,11 +369,13 @@ public class JCF41_HuffBoom_GroepC {
             if (root.leftChild == null && root.rightChild == null)
             {
                 //System.out.println("is blaadje: " + root.karakter);
-                finalMsg += root.character;
+                sb.append(root.character);
                 root = realRoot;
             }            
         }
-        
-        return finalMsg;
+        endtime = System.nanoTime();
+        duration = (endtime - starttime) / 1000000;
+        System.out.println("Decompress binair duurt: " + duration);
+        return sb.toString();
     }
 }
