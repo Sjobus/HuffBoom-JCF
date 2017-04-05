@@ -91,7 +91,7 @@ public class JCF41_HuffBoom_GroepCTest {
         for(char c : freq.keySet())
         {
             HuffKnoop knoop = new HuffKnoop(c,freq.get(c));
-            System.out.println("Knoop :" + knoop.character + " waarde: " + knoop.freq);
+            
             expResult.add(knoop);
         }
         PriorityQueue<HuffKnoop> result = JCF41_HuffBoom_GroepC.MaakKnoop(freq);
@@ -112,14 +112,42 @@ public class JCF41_HuffBoom_GroepCTest {
     @Test
     public void testBouwBoom() {
         System.out.println("BouwBoom");
-        PriorityQueue<HuffKnoop> pq = null;
-        HuffKnoop expResult = null;
+        HashMap<Character, Integer> freq = new HashMap<>();
+        freq.put('t',2);
+        freq.put('e',1);
+        freq.put('s',1);
+        freq.put('1',1);
+        PriorityQueue<HuffKnoop> pq = new PriorityQueue<HuffKnoop>();
+        for(char c : freq.keySet())
+        {
+            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));
+            System.out.println("Knoop :" + knoop.character + " waarde: " + knoop.freq);
+            pq.add(knoop);
+        }
+        HuffKnoop expResult = bouwboom(pq);
+        for(char c : freq.keySet())
+        {
+            HuffKnoop knoop = new HuffKnoop(c,freq.get(c));
+            System.out.println("Knoop :" + knoop.character + " waarde: " + knoop.freq);
+            pq.add(knoop);
+        }
         HuffKnoop result = JCF41_HuffBoom_GroepC.BouwBoom(pq);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
+    public static HuffKnoop bouwboom(PriorityQueue<HuffKnoop> pq)
+    {
+        while(pq.size() > 1)
+        {
+            HuffKnoop left = pq.poll();
+            HuffKnoop right = pq.poll();
+            HuffKnoop parentKnoop = new HuffKnoop(left, right);
+            //System.out.println("Made Knoop LeftChild: " + parentKnoop.leftChild.character + parentKnoop.leftChild.freq + " Rightchild: " + parentKnoop.rightChild.character + parentKnoop.rightChild.freq);
+            pq.add(parentKnoop);
+        }
+        return pq.poll();
+    }
     /**
      * Test of getCharacterCode method, of class JCF41_HuffBoom_GroepC.
      
