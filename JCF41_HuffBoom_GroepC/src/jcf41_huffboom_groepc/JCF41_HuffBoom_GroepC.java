@@ -162,7 +162,7 @@ public class JCF41_HuffBoom_GroepC {
         
         endtime = System.nanoTime();
         duration = (endtime - starttime) / 1000000;
-        System.out.println("Compress code duurt: " + duration);
+        System.out.println("Compress code duurt: " + duration);        
         return sb.toString();
     } 
     
@@ -356,16 +356,16 @@ public class JCF41_HuffBoom_GroepC {
         Long endtime;
         Long duration;
         starttime = System.nanoTime();
-        for (char charazard : msg.toCharArray())
+        for (char c : msg.toCharArray())
         {
-                if (charazard == '0')
+                if (c == '0')
                 {
                     //System.out.println("ga naar links");
                     
                     root = root.leftChild;
 
                 }
-                else if (charazard == '1')
+                else if (c == '1')
                 {
                     //System.out.println("ga naar rechts");
                     

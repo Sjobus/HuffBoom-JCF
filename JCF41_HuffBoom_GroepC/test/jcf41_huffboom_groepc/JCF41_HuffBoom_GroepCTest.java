@@ -5,6 +5,12 @@
  */
 package jcf41_huffboom_groepc;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +31,7 @@ import static org.junit.Assert.*;
 public class JCF41_HuffBoom_GroepCTest {
     
     public static HuffKnoop deRootKnoop;
+    public static HuffKnoop deRootKnoop2;
     public JCF41_HuffBoom_GroepCTest() {
     }
     
@@ -107,9 +114,7 @@ public class JCF41_HuffBoom_GroepCTest {
             assertEquals(knoopResult.character,expKnoop.character); 
             assertEquals(knoopResult.freq,expKnoop.freq);
         }
-        
-        
-        
+       
     }
 
     /**
@@ -141,7 +146,7 @@ public class JCF41_HuffBoom_GroepCTest {
         assertEquals(expResult.freq,deRootKnoop.freq);
         
     }
-
+    
     public static HuffKnoop bouwboom(PriorityQueue<HuffKnoop> pq)
     {
         while(pq.size() > 1)
@@ -197,54 +202,119 @@ public class JCF41_HuffBoom_GroepCTest {
         System.out.println("Compress");
         ArrayList<String> text = new ArrayList<>();
         text.add("test1");
-
         HashMap<Character, String> codeMap = new HashMap<>();
-        codeMap = getCharacterCode(deRootKnoop,"", codeMap); 
-        String expResult = "010000010110";
+        HashMap<Character, String> testmap = getCharacterCode(deRootKnoop,"", codeMap);
+        
+        String expResult = "null0111100110null";
         String result = JCF41_HuffBoom_GroepC.Compress(text, codeMap);
         assertEquals(expResult, result);
     }
-
+    
     /**
      * Test of LezenBestand method, of class JCF41_HuffBoom_GroepC.
-     
+     */
     @Test
     public void testLezenBestand() {
         System.out.println("LezenBestand");
-        String bestand = "";
-        ArrayList<String> expResult = null;
+        String bestand = "..\\AliceInWonderLand.txt";
+        ArrayList<String> expResult = new ArrayList<>();
+        BufferedReader reader = null;
+        try
+        {
+           File file = new File(bestand);
+           reader = new BufferedReader(new FileReader(file));
+           
+           String line;
+           while((line = reader.readLine()) != null)
+           {
+               expResult.add(line);
+           }
+        }
+        catch(IOException e)
+        {
+            System.out.println("Error bij het lezen: " + e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                reader.close();
+            }
+            catch(IOException e)
+            {
+                System.out.println("Error bij het sluiten van reader: " + e.getMessage());
+            }
+        }
         ArrayList<String> result = JCF41_HuffBoom_GroepC.LezenBestand(bestand);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+        
+    }
 
     /**
      * Test of LezenBoomObject method, of class JCF41_HuffBoom_GroepC.
-     
+    */ 
     @Test
     public void testLezenBoomObject() {
         System.out.println("LezenBoomObject");
         HuffKnoop expResult = null;
-        HuffKnoop result = JCF41_HuffBoom_GroepC.LezenBoomObject();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+        FileInputStream fis = null;
+        ObjectInputStream in = null;        
+        try
+        {
 
+            fis = new FileInputStream("..\\Huffboom.txt");
+            in = new ObjectInputStream(fis);
+            expResult = (HuffKnoop)in.readObject();
+        }
+        catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e)
+        {
+            System.out.println("Error bij lezen Binary file");
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (in != null)
+                {
+                    in.close();
+                }
+                if (fis != null)
+                {
+                    fis.close();
+                }
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        HuffKnoop result = JCF41_HuffBoom_GroepC.LezenBoomObject();
+        assertEquals(expResult.character, result.character);
+        assertEquals(expResult.freq, result.freq);
+        
+    }
+
+    
     /**
      * Test of decompress method, of class JCF41_HuffBoom_GroepC.
-     
+     */
     @Test
     public void testDecompress() {
-        System.out.println("decompress");
-        HuffKnoop root = null;
-        String msg = "";
-        String expResult = "";
-        String result = JCF41_HuffBoom_GroepC.decompress(root, msg);
+        System.out.println("decompress" + " " + deRootKnoop.toString());
+        
+        HuffKnoop root = deRootKnoop;        
+        String msg = "0111100110";
+        String expResult = "test1";
+        String result = JCF41_HuffBoom_GroepC.decompress(deRootKnoop, msg);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+        
+    }
     
 }
