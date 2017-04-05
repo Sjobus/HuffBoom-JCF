@@ -81,12 +81,14 @@ public class JCF41_HuffBoom_GroepCTest {
      */
     @Test
     public void testMaakKnoop() {
-        System.out.println("MaakKnoop");
+        System.out.println("TestMaakKnoop");
+        //Vull map voor methode input
         HashMap<Character, Integer> freq = new HashMap<>();
         freq.put('t',2);
         freq.put('e',1);
         freq.put('s',1);
         freq.put('1',1);
+        //Maak het verwachte resultaat
         PriorityQueue<HuffKnoop> expResult = new PriorityQueue<HuffKnoop>();
         for(char c : freq.keySet())
         {
@@ -94,7 +96,9 @@ public class JCF41_HuffBoom_GroepCTest {
             
             expResult.add(knoop);
         }
+        //Voer methode uit om resultaat te krijgen
         PriorityQueue<HuffKnoop> result = JCF41_HuffBoom_GroepC.MaakKnoop(freq);
+        //Vergelijk verwachte resultaat met het resultaat
         for(HuffKnoop entry : result)
         {
             //System.out.println("entry: " + entry.getKey() + " value: " + entry.getValue());
