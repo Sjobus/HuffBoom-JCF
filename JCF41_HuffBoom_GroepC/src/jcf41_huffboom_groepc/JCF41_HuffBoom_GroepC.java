@@ -30,6 +30,8 @@ public class JCF41_HuffBoom_GroepC {
     private final static String alice = "..\\AliceInWonderLand.txt";
     private final static String binaryCode ="..\\BinaryFile.dat";
     private final static String boomCode ="..\\Huffboom.txt";
+    private static HuffKnoop rootKnoop;
+    
     /**
      * @param args the command line arguments
      */
@@ -42,11 +44,12 @@ public class JCF41_HuffBoom_GroepC {
         HashMap<Character, String> characterCodeMap = new HashMap<>();
         freq = Frequentie(chars);
         knoopList = MaakKnoop(freq);
-        HuffKnoop rootKnoop = BouwBoom(knoopList);
+        rootKnoop = BouwBoom(knoopList);
         SchrijfBoomObject(rootKnoop);
         getCharacterCode(rootKnoop,"", characterCodeMap);        
         rootKnoop = LezenBoomObject();
-        SchrijfBinairyFile(Compress(zinnen, characterCodeMap));        
+        SchrijfBinairyFile(Compress(zinnen, characterCodeMap));
+        
         System.out.println(decompress(rootKnoop,LezenBinair(binaryCode)));
        
        
@@ -370,6 +373,7 @@ public class JCF41_HuffBoom_GroepC {
                     dos.write(b);
                 }
             }
+            rootKnoop.extraZeroCount = extraZeroCount;
             dos.write(bitSet.toByteArray());
         }
         catch (IOException e)
@@ -406,6 +410,7 @@ public class JCF41_HuffBoom_GroepC {
      */
     public static String decompress(HuffKnoop root, String msg)
     {
+        msg = msg.substring(0, (msg.length()-rootKnoop.extraZeroCount));
         StringBuilder sb = new StringBuilder();
         HuffKnoop realRoot = root;
         Long starttime;

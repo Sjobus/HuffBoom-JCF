@@ -15,6 +15,7 @@ public class HuffKnoop implements Comparable<HuffKnoop>, Serializable{
     public char character;
     public Integer freq;
     public HuffKnoop leftChild, rightChild;
+    public int extraZeroCount;
     
     public HuffKnoop(char character, int freq)
     {
