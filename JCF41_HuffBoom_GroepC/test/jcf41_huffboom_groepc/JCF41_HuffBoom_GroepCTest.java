@@ -307,8 +307,7 @@ public class JCF41_HuffBoom_GroepCTest {
      */
     @Test
     public void testDecompress() {
-        System.out.println("decompress" + " " + deRootKnoop.toString());
-        
+        System.out.println("decompress");        
         HuffKnoop root = deRootKnoop;        
         String msg = "0111100110";
         String expResult = "test1";
